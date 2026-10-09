@@ -1,0 +1,34 @@
+Vagrant.configure("2") do |config|
+  
+  config.vm.box = "bento/ubuntu-24.04"
+  
+  
+  config.vm.network "forwarded_port", guest: 7070, host: 9090
+  
+  
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "2048"
+  end
+  
+  
+  config.vm.provision "shell", inline: <<-SHELL
+    apt-get update
+    apt-get install -y openjdk-8-jdk tomcat9 nginx
+    
+    
+    sed -i 's/port="8080"/port="7070"/' /etc/tomcat9/server.xml
+    systemctl restart tomcat9
+    
+    
+    cat <<EOF > /etc/nginx/sites-available/default
+    server {
+        listen 80;
+        server_name localhost;
+        location / {
+            proxy_pass http://localhost:7070;
+        }
+    }
+EOF
+    systemctl restart nginx
+  SHELL
+end
