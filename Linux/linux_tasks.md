@@ -2,6 +2,7 @@
 
 ## Task 1: System Information Script
 The script `os_info.sh` was created to display the OS information and resource usage.
+
 ```bash
 #!/bin/bash
 
@@ -23,34 +24,42 @@ echo "• Total Memory: $(free -h | awk '/^Mem:/ {print $2}')"
 echo "• Memory Usage: $(free -h | awk '/^Mem:/ {print $3 " / " $2}')"
 echo "• Swap Usage: $(free -h | awk '/^Swap:/ {print $3 " / " $2}')"
 echo "• CPU Cores: $(nproc)"
-
+```
 ##Task 2: Create User and Groups
-
+```bash
 #!/bin/bash
+
 sudo groupadd PSgroup
 sudo groupadd dba
 sudo useradd -m -g PSgroup -G dba -s /bin/bash PS
 sudo passwd PS
-
+```
 ##Task 3: Modify Root Password
+```bash
+#!/bin/bash
 sudo passwd root
 
-
+```
 ##Task 4: Install MySQL DB Engine and HAProxy
+```bash
+#!/bin/bash
 sudo apt update
 sudo apt install mysql-server haproxy -y
 
-
+```
 ##Task 5: Firewall Rules (TCP/UDP port 3306)
 Configured UFW to allow traffic only on port 3306 for MySQL, and enabled the firewall.
+```bash
+#!/bin/bash
 sudo ufw enable
 sudo ufw allow 3306/tcp
 sudo ufw allow 3306/udp
 sudo ufw allow 22/tcp
-
+```
 ##Task 6: Copy file using SCP 
 Installed SSH server (required for SCP on Ubuntu Desktop), created a test file, and transferred it to the VM using scp.
-
+```bash
+#!/bin/bash
 sudo apt install openssh-server -y
 sudo systemctl enable --now ssh
 
